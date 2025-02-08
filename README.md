@@ -89,3 +89,49 @@ public class DataUUID extends DataType<UUID> implements Comparable<DataUUID> {
 }
 ```
 And for finish registration: `DataTypes.register(UUID.class, DataUUID.class);`
+
+
+# Now the better question, how i use it? 
+Create:
+```java
+StoragePlayer storagePlayer = new StoragePlayer(uuid);
+```
+Update a value:
+```java
+storagePlayer.from(StorageValue.STRING).set("database can't communicate");
+```
+Save (only if you have do the method like up):
+```java
+storagePlayer.save();
+```
+Use native Data Type for more method:
+```java
+DataInteger dataInteger = (DataInteger) ((Object)storagePlayer.from(StorageValue.INT));
+dataInteger.add(random.nextInt());
+```
+Get a value:
+```java
+storagePlayer.from(StorageValue.STRING).get()
+```
+Get an existing Storage Player:
+```java
+database.find(uuid, false);
+```
+- UUID is the primary value
+- false is the `queryIfNull` that if is null, find on the database. (use it like the first time when you get the player)
+Find By Onther parameter: (Return the storage player)
+```java 
+database.find(StorageValue.NAME, "abc");
+```
+
+# The feature
+```java
+database.find(StorageValue.INT, 10, true)
+```
+This is not a feature??? bha, see the parameter
+- Value
+- Top
+- Reverse (true like 99, 39, 10. if false 10, 39, 99)
+this is the best things i ever made in a database managment system.
+
+If you want to see my olther public database managment system, see https://github.com/SkyNest-Studios/SkyDatabase (The maven repo dont go, but if you want self host, contact me)
