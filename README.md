@@ -1,4 +1,5 @@
 Hey, i am the dev of CantData, is the most simple data managment.
+This is a beta.
 
 # Create the database
 We have to create the database class
