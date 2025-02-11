@@ -24,6 +24,7 @@ public class Main {
         storagePlayer.save();
          */
 
+
         System.out.println("Storage: " + database.find(StorageValue.NAME, "abc"));
     }
 

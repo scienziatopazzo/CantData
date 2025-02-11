@@ -149,9 +149,9 @@ public abstract class CantDatabase<T extends CantData> {
         return dataList;
     }
 
-    public List<T> getDatas(boolean queryIfNull) {
+    public List<T> getDatas(boolean query) {
         if (useCache) {
-            if (queryIfNull) {
+            if (query) {
                 List<T> queriedData = queryAllData();
                 cached.clear();
                 cached.addAll(queriedData);
@@ -192,7 +192,7 @@ public abstract class CantDatabase<T extends CantData> {
     }
 
     public <E extends Enum<E>> T find(E key, Object value) {
-        for (T data : getDatas(false)) {
+        for (T data : getDatas()) {
             Optional<DataType<?>> opt = Optional.ofNullable(data.from(key));
             if (opt.isPresent() && opt.get().get().equals(value)) return data;
         }
@@ -200,21 +200,7 @@ public abstract class CantDatabase<T extends CantData> {
     }
 
     public <E extends Enum<E>> List<T> find(E key, int top, boolean reverse) {
-        List<T> results = new ArrayList<>();
-        String sql = "SELECT id, data FROM " + tableName + ";";
-
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                UUID id = UUID.fromString(rs.getString("id"));
-                String dataStr = rs.getString("data");
-                T t = createData(id, dataStr);
-                results.add(t);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        List<T> results = getDatas();
 
         results.sort((a, b) -> {
             DataType<?> aValue = a.from(key);

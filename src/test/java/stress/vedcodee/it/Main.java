@@ -21,23 +21,23 @@ public class Main {
     @Getter private static Database database;
 
     public static void main(String[] args) {
-        database = new Database(new Auth("sd", "localhost", 3306, "root", ""), true);
+        database = new Database(new Auth("sd", "localhost", 3306, "root", ""), false);
 
         List<UUID> uuids = new CopyOnWriteArrayList<>();
-        int numThreads = 1000;
+        int numThreads = 100000;
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
         long startTime = System.currentTimeMillis();
 
         Random random = new Random();
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000; i++) {
             executor.execute(() -> {
                 UUID uuid = UUID.randomUUID();
                 uuids.add(uuid);
 
                 StoragePlayer storagePlayer = new StoragePlayer(uuid);
-                storagePlayer.from(StorageValue.STRING).set(uuid.toString());
+                storagePlayer.from(StorageValue.STRING).set("a");
 
                 DataInteger dataInteger = (DataInteger) ((Object)storagePlayer.from(StorageValue.INT));
                 dataInteger.add(random.nextInt());
@@ -61,6 +61,7 @@ public class Main {
         saveStartTime = System.currentTimeMillis();
         System.out.println("Result: " + (saveStartTime - startTime) + "ms");
 
+        System.out.println(database.getDatas().size());
         System.out.println("Random: " + database.find(StorageValue.INT, 10, true).stream().map(s -> s.from(StorageValue.INT)).map(DataType::serialize).collect(Collectors.toList()));
     }
 
