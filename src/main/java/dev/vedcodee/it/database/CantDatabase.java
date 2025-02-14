@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import dev.vedcodee.it.data.CantData;
 import dev.vedcodee.it.database.auth.Auth;
 import dev.vedcodee.it.types.DataType;
+import lombok.Getter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,7 +25,7 @@ public abstract class CantDatabase<T extends CantData> {
     private final String tableName;
     private List<T> cached;
 
-    private HikariDataSource dataSource;
+    @Getter private HikariDataSource dataSource;
 
     public CantDatabase(Auth auth, boolean useCache, String tableName) {
         this.auth = auth;
@@ -215,9 +216,5 @@ public abstract class CantDatabase<T extends CantData> {
 
         return results.stream().limit(top).collect(Collectors.toList());
     }
-
-
-
-
 
 }
