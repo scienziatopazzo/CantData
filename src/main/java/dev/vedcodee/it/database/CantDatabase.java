@@ -85,8 +85,10 @@ public abstract class CantDatabase<T extends CantData> {
             stmt.setString(2, data);
             stmt.executeUpdate();
             if (useCache) {
-                T newData = createData(id, data);
-                if(cached.stream().noneMatch(d -> d.getUuid().equals(id))) cached.add(newData);
+                if(cached.stream().noneMatch(d -> d.getUuid().equals(id))) {
+                    T newData = createData(id, data);
+                    cached.add(newData);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -3,7 +3,6 @@ package dev.vedcodee.it.data;
 import dev.vedcodee.it.types.DataEnum;
 import dev.vedcodee.it.types.DataType;
 import dev.vedcodee.it.types.DataTypes;
-import dev.vedcodee.it.types.models.DataUUID;
 import lombok.Getter;
 
 import java.util.Map;
@@ -27,7 +26,9 @@ public abstract class CantData<E extends Enum<E> & DataEnum> {
         for (Enum<?> constant : enumConstants) {
             try {
                 Enum<?> type = (Enum<?>) dataEnumClass.getDeclaredField(constant.name()).get(null);
-                datas.put(constant.name(), DataTypes.of(((DataEnum) type).getType()));
+                DataType<?> dataType = DataTypes.of(((DataEnum) type).getType());
+                dataType.init(this, constant);
+                datas.put(constant.name(), dataType);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 throw new RuntimeException("Failed to initialize data types", e);
             }
@@ -62,6 +63,15 @@ public abstract class CantData<E extends Enum<E> & DataEnum> {
             data.append(value.serialize());
         }
         return data.toString();
+    }
+
+    // boolean is the cancel. true = cancel, false = continue
+    public boolean isCancelled(Enum<?> from, Object newValue) {
+        return onChange((E) from, newValue);
+    }
+
+    public boolean onChange(E from, Object newValue) {
+        return false;
     }
 
 

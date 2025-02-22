@@ -24,4 +24,15 @@ public class StoragePlayer extends CantData<StorageValue> {
         Main.getDatabase().save(this);
     }
 
+    @Override
+    public boolean onChange(StorageValue value, Object newValue) {
+        if(value == StorageValue.KILLS) {
+            int kills = (int) newValue;
+            if(kills == 10) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
