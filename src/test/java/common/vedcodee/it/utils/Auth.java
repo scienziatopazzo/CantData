@@ -1,4 +1,4 @@
-package dev.vedcodee.it.database.auth;
+package common.vedcodee.it.utils;
 
 import lombok.Getter;
 
@@ -43,4 +43,3 @@ public class Auth {
     }
 
 }
-
